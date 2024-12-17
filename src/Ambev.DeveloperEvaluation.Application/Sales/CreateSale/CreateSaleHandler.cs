@@ -27,18 +27,19 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     public async Task<CreateSaleResult> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
     {
         var sale = _mapper.Map<Sale>(command);
-        
-        foreach(var item in sale.Items)
+        sale.SaleDate = DateTime.SpecifyKind(command.SaleDate, DateTimeKind.Utc);
+
+        foreach (var item in sale.Items)
         {
             item.Discount = _saleService.CalculateDiscount(item.Quantity, item.UnitPrice);
             item.TotalAmount = (item.Quantity * item.UnitPrice) - item.Discount;
         }
-        
+
         sale.TotalAmount = sale.Items.Sum(i => i.TotalAmount);
         var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
-        
+
         await _bus.Publish(new SaleCreatedEvent(createdSale));
-        
+
         return _mapper.Map<CreateSaleResult>(createdSale);
     }
 }
