@@ -23,7 +23,7 @@ public class SalesController : BaseController
     }
 
     [HttpGet("{id}")]
-    
+    [Authorize]
     public async Task<ActionResult<ApiResponseWithData<GetSaleResult>>> Get([FromRoute] Guid id)
     {
         var result = await _mediator.Send(new GetSaleQuery { Id = id });
@@ -31,7 +31,7 @@ public class SalesController : BaseController
     }
 
     [HttpPost]
-
+    [Authorize]
     public async Task<ActionResult<ApiResponseWithData<CreateSaleResult>>> Create([FromBody] CreateSaleCommand command)
     {
         var result = await _mediator.Send(command);
@@ -40,7 +40,7 @@ public class SalesController : BaseController
     }
 
     [HttpPut("{id}")]
-
+    [Authorize]
     public async Task<ActionResult<ApiResponseWithData<UpdateSaleResult>>> Update([FromRoute] Guid id, [FromBody] UpdateSaleCommand command)
     {
         if (id != command.Id)
@@ -52,7 +52,7 @@ public class SalesController : BaseController
     }
 
     [HttpPost("{id}/cancel")]
-    
+    [Authorize]
     public async Task<IActionResult> Cancel([FromRoute] Guid id)
     {
         var result = await _mediator.Send(new CancelSaleCommand { Id = id });
@@ -63,7 +63,7 @@ public class SalesController : BaseController
     }
 
     [HttpDelete("{id}")]
-
+    [Authorize]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         await _mediator.Send(new DeleteSaleCommand { Id = id });
