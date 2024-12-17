@@ -7,7 +7,7 @@ This project is a full-stack application built with .NET 8 and Angular.
 
 - .NET SDK 8.0
 - Node.js and npm
-- SQL Server
+- PostgreSQL
 
 ## Project Structure
 
